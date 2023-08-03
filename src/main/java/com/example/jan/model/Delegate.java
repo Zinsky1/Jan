@@ -2,11 +2,8 @@ package com.example.jan.model;
 
 
 import com.example.jan.unit.Type;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,19 +11,24 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "delegate")
 @AllArgsConstructor
-//@NoArgsConstructor
 public class Delegate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(name = "requisite", length = 5, nullable = false)
+    private String requisite;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 30, nullable = false)
     private Type type;
 
+    //TODO: валидация
     @Column(name = "value_name_firm", length = 30)
     private String valueNameFirm;
 
+    //TODO: валидация
     @Column(name = "value_instead_name_firm", length = 30)
     private String valueInsteadNameFirm;
     @Basic
@@ -37,13 +39,13 @@ public class Delegate {
     private LocalDate dtEnd;
 
 
-    @Column(name = "is_now_active")
+    @Column(name = "is_now_active", nullable = false)
     private Boolean isNowActive;
-
 
     @Column(name = "user_create", length = 255, nullable = false)
     private String userCreate;
 
+    //TODO: валидация
     @Basic
     @Column(name = "data_create_date", nullable = false)
     private LocalDateTime dataCreateDate;
@@ -61,19 +63,21 @@ public class Delegate {
         this.dataCreateDate = getDataCreateDate();
 
         if (this.isNowActive == null) {
-
+            this.isNowActive = true;
         }
-        this.isNowActive = getNowActive();
+        this.isNowActive = getIsNowActive();
 
-
+        if (this.requisite == null) {
+        }
+        this.requisite = getRequisite();
 
         if (this.type == null) {
-
-            //throw new IllegalStateException("TYPE should not be null");
         }
         this.type = getType();
 
     }
+
+
 
 
     public Long getId() {
@@ -124,11 +128,11 @@ public class Delegate {
         this.dtEnd = dtEnd;
     }
 
-    public Boolean getNowActive() {
+    public Boolean getIsNowActive() {
         return isNowActive;
     }
 
-    public void setNowActive(Boolean nowActive) {
+    public void setIsNowActive(Boolean nowActive) {
         isNowActive = nowActive;
     }
 
@@ -148,4 +152,11 @@ public class Delegate {
         this.dataCreateDate = dataCreateDate;
     }
 
+    public String getRequisite() {
+        return requisite;
+    }
+
+    public void setRequisite(String requisite) {
+        this.requisite = requisite;
+    }
 }
